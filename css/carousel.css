@@ -73,20 +73,20 @@ body {
 -------------------------------------------------- */
 
 /* Pad the edges of the mobile views a bit */
-.marketing {
+.info-panel {
   padding-left: 15px;
   padding-right: 15px;
 }
 
 /* Center align the text within the three columns below the carousel */
-.marketing .col-lg-4 {
+.info-panel .col-lg-4 {
   text-align: center;
   margin-bottom: 20px;
 }
-.marketing h2 {
+.info-panel h2 {
   font-weight: normal;
 }
-.marketing .col-lg-4 p {
+.info-panel .col-lg-4 p {
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -99,7 +99,7 @@ body {
   margin: 80px 0; /* Space out the Bootstrap <hr> more */
 }
 
-/* Thin out the marketing headings */
+/* Thin out the.info-panel headings */
 .featurette-heading {
   font-weight: 300;
   line-height: 1;
@@ -114,7 +114,7 @@ body {
 @media (min-width: 768px) {
 
   /* Remove the edge padding needed for mobile */
-  .marketing {
+  .info-panel {
     padding-left: 0;
     padding-right: 0;
   }
