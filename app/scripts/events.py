@@ -4,8 +4,12 @@ import datetime
 dateformat="yyyy/mm/dd"
 
 def get_events():
-    with open("events.csv","r") as f:
+    with open("app/static/content/events.csv","r",encoding="utf-8") as f:
         data=f.read()
+
+    with open("test.txt","w",encoding="utf-8") as f:
+        f.write(data)
+
     lines=data.split("\n")
     columns=lines[0].split("\t")
     events=[]
