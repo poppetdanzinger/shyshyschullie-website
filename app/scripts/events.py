@@ -14,7 +14,6 @@ def get_events():
             continue
 
         event=get_event(line,columns)
-        print(event)
         events.append(event)
 
     events=get_sorted_events(events)
