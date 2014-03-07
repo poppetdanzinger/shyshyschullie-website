@@ -83,7 +83,7 @@
 			<h3>{{event.title}}</h3>
 			
 			{% if event.location %}
-			<p><strong>Where:</strong> <a href="http://maps.google.com/?q={{event.location}}">
+			<p><strong>Where:</strong> <a href="http://maps.google.com/?q={{event.url_safe_location}}">
 				{{event.location}}
 				<img class="social-icon" src="{{ url_for('static', filename='img/google-maps.png') }}" alt="google calendar">
 				</a>

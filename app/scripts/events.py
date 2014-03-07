@@ -1,5 +1,5 @@
 
-import datetime
+import datetime, urllib.parse
 
 dateformat="yyyy/mm/dd"
 
@@ -42,6 +42,8 @@ def get_event(line,columns):
             d=get_formatted_date(event[dateformat])
             if d:
                 event["date"]=d
+        if "location" in event:
+            event["url_safe_location"]=urllib.parse.quote(event["location"])
 
     return event
 
