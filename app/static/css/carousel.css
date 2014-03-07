@@ -1,15 +1,3 @@
-/*Crap added by zulban:
-
-.stretchCarousel img {
-	width: auto;
-	height: 225px;
-	max-height: 225px;
-}
-
-
-
-
-
 /* GLOBAL STYLES
 -------------------------------------------------- */
 /* Padding below the footer and lighter body text */
@@ -18,6 +6,9 @@ body {
   padding-bottom: 40px;
   color: #5a5a5a;
 }
+
+
+
 /* CUSTOMIZE THE NAVBAR
 -------------------------------------------------- */
 
@@ -25,19 +16,19 @@ body {
 .navbar-wrapper {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   z-index: 20;
 }
 
 /* Flip around the padding for proper display in narrow viewports */
 .navbar-wrapper .container {
-  padding-left: 0;
   padding-right: 0;
+  padding-left: 0;
 }
 .navbar-wrapper .navbar {
-  padding-left: 15px;
   padding-right: 15px;
+  padding-left: 15px;
 }
 
 
@@ -73,22 +64,22 @@ body {
 -------------------------------------------------- */
 
 /* Pad the edges of the mobile views a bit */
-.info-panel {
-  padding-left: 15px;
+.marketing {
   padding-right: 15px;
+  padding-left: 15px;
 }
 
 /* Center align the text within the three columns below the carousel */
-.info-panel .col-lg-4 {
-  text-align: center;
+.marketing .col-lg-4 {
   margin-bottom: 20px;
+  text-align: center;
 }
-.info-panel h2 {
+.marketing h2 {
   font-weight: normal;
 }
-.info-panel .col-lg-4 p {
-  margin-left: 10px;
+.marketing .col-lg-4 p {
   margin-right: 10px;
+  margin-left: 10px;
 }
 
 
@@ -99,7 +90,7 @@ body {
   margin: 80px 0; /* Space out the Bootstrap <hr> more */
 }
 
-/* Thin out the.info-panel headings */
+/* Thin out the marketing headings */
 .featurette-heading {
   font-weight: 300;
   line-height: 1;
@@ -114,9 +105,9 @@ body {
 @media (min-width: 768px) {
 
   /* Remove the edge padding needed for mobile */
-  .info-panel {
-    padding-left: 0;
+  .marketing {
     padding-right: 0;
+    padding-left: 0;
   }
 
   /* Navbar positioning foo */
@@ -124,12 +115,12 @@ body {
     margin-top: 20px;
   }
   .navbar-wrapper .container {
-    padding-left:  15px;
     padding-right: 15px;
+    padding-left:  15px;
   }
   .navbar-wrapper .navbar {
-    padding-left:  0;
     padding-right: 0;
+    padding-left:  0;
   }
 
   /* The navbar becomes detached from the top, so we round the corners */
@@ -147,7 +138,6 @@ body {
   .featurette-heading {
     font-size: 50px;
   }
-
 }
 
 @media (min-width: 992px) {
