@@ -1,0 +1,12 @@
+
+install the unofficial python3 google api v3 library:
+pip install git+https://github.com/enorvelle/GoogleApiPython3x.git
+
+in that repo there are folders:
+*apiclient
+*oauth2client
+*uritemplate
+which must be in venv site packages.
+
+run this the first time:
+python3 sample.py --noauth_local_webserver 

@@ -1,0 +1,151 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero-unit banner-background">
+	<div class="row">
+		<div class="col-lg-4">
+			<img class="img-center alex-circle" src="{{ url_for('static', filename='img/gold-flowers1.png') }}" alt="gold flowers">
+		</div>
+		<div class="col-lg-4">
+			<h1>Schullie's Music Notes</h1>
+		</div>
+		<div class="col-lg-4">
+			<img class="img-center alex-circle" src="{{ url_for('static', filename='img/gold-flowers1.png') }}" alt="gold flowers">
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<h1>Blog post title</h1>
+</div>
+
+<div class="container marketing"> 
+	<div class="row content-background">
+		<div class="col-lg-3">
+			<img class="img-circle" src="{{ url_for('static', filename='img/blog.png') }}" alt="Generic placeholder image">
+		</div>
+		<div class="col-lg-3">
+			<img class="img-circle" src="{{ url_for('static', filename='img/blog.png') }}" alt="Generic placeholder image">
+		</div>
+		<div class="col-lg-3">
+			<img class="img-circle" src="{{ url_for('static', filename='img/blog.png') }}" alt="Generic placeholder image">
+		</div>
+		<div class="col-lg-3">
+			<img class="img-circle" src="{{ url_for('static', filename='img/blog.png') }}" alt="Generic placeholder image">
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<p>blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! blog text!!! </p>
+</div>
+
+<div class="container span12">
+	<div class="row">
+		<div class="col-lg-3">
+		</div>
+		<div id=youtube-container" class="col-lg-6">
+			<iframe width="640" height="390" src="http://youtube.com/videostuff" frameborder="0" allowfullscreen></iframe>
+		</div>
+		<div class="col-lg-3">
+		</div>
+	</div>
+</div>
+
+<!-- event list -->
+<div class="container">
+	<div class="hero-unit banner-background">
+			<img class="img-center alex-circle" src="{{ url_for('static', filename='img/gold-flowers1.png') }}" alt="gold flowers">
+		<h1>Upcoming Events</h1>
+		<p>You can also follow my <a href="https://www.google.com/calendar/embed?src=shyshyschullie%40gmail.com&ctz=America/Toronto">
+			Google Calendar
+			<img class="social-icon" src="{{ url_for('static', filename='img/google-calendar.png') }}" alt="google calendar">
+		</a></p>
+			<img class="img-center alex-circle" src="{{ url_for('static', filename='img/gold-flowers2.png') }}" alt="gold flowers">
+
+	</div>
+
+	<div class="row-fluid content-background">
+		<div class="span7">
+			{% for event in events %}
+			<div>
+			<h3>{{event.title}}</h3>
+			
+			{% if event.location %}
+			<p><strong>Where:</strong> <a href="http://maps.google.com/?q={{event.url_safe_location}}">
+				{{event.location}}
+				<img class="social-icon" src="{{ url_for('static', filename='img/google-maps.png') }}" alt="google calendar">
+				</a>
+			</p>
+			{% endif %}
+
+			{% if event.date %}
+			<p><strong>Date:</strong> {{event.date}}</p>
+				{% if event.time %}
+				<p><strong>When:</strong> {{event.time}}</p>
+				{% endif %}
+				{% if event.doorsopen %}
+				<p><strong>Doors open at:</strong> {{event.doorsopen}}</p>
+				{% endif %}
+			{% endif %}
+
+			{% if event.link %}
+			<p><strong><a href="{{ event.link }}">More Info</a></strong></p>
+			{% endif %}
+
+			{% if event.dresscode %}
+			<p><strong>Dress code!</strong> {{event.dresscode}}</p>
+			{% endif %}
+
+			{% if event.notes %}
+			<p><strong>Take note!</strong> {{event.notes}}</p>
+			{% endif %}
+
+			</div>
+			{% endfor %}
+		</div>
+		<div class="span5">
+			<img class="alex-circle alex-circle-right" src="{{ url_for('static', filename='img/circle-alex1.png') }}" alt="picture of alex">
+			<br>
+			<img class="alex-circle" src="{{ url_for('static', filename='img/circle-alex6.png') }}" alt="picture of alex">
+			<br>
+			<img class="alex-circle alex-circle-right" src="{{ url_for('static', filename='img/circle-alex2.png') }}" alt="picture of alex">
+		</div>
+	</div>
+</div>
+
+<script>
+//dynamic resizing of youtube iframe so it fits in its parent
+// By Chris Coyier & tweaked by Mathias Bynens
+$(function() {
+	// Find all YouTube videos
+	var $allVideos = $("iframe[src^='http://www.youtube.com']"),
+	    // The element that is fluid width
+	    $fluidEl = $("#youtube-container");
+	// Figure out and save aspect ratio for each video
+	$allVideos.each(function() {
+		$(this)
+			.data('aspectRatio', this.height / this.width)
+			// and remove the hard coded width/height
+			.removeAttr('height')
+			.removeAttr('width');
+	});
+	// When the window is resized
+	// (You'll probably want to debounce this)
+	$(window).resize(function() {
+		var newWidth = $fluidEl.width();
+		// Resize all videos according to their own aspect ratio
+		$allVideos.each(function() {
+			var $el = $(this);
+			$el
+				.width(newWidth)
+				.height(newWidth * $el.data('aspectRatio'));
+		});
+	// Kick off one resize to fix all videos on page load
+	}).resize();
+});
+</script>
+
+{% endblock %}
