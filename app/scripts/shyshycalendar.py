@@ -46,6 +46,9 @@ def get_events():
         print("ImportError in shyshycalendar. Are google calendar libraries installed?")
         print(e)
         return []
+    except Exception as e:
+        print(e)
+        return []
 
     storage = file.Storage('app/scripts/shyshy-storage.dat')
     credentials = storage.get()
