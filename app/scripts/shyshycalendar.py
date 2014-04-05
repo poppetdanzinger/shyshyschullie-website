@@ -25,16 +25,21 @@ by running:
 
 """
 
-import os
+import os, os.path
 
 def get_events():
+    secrets="client_secrets.json"
+    if not os.path.isfile(secrets):
+        print("Could not find file: \"%s\""%secrets)
+        return []
+
     try:
         import httplib2
         from apiclient import discovery
         from oauth2client import file
         from oauth2client import client
         from oauth2client import tools
-        CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
+        CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), secrets)
         FLOW = client.flow_from_clientsecrets(CLIENT_SECRETS,
                                               scope=[
                                                   'https://www.googleapis.com/auth/calendar',
@@ -44,9 +49,6 @@ def get_events():
 
     except ImportError as e:
         print("ImportError in shyshycalendar. Are google calendar libraries installed?")
-        print(e)
-        return []
-    except Exception as e:
         print(e)
         return []
 
