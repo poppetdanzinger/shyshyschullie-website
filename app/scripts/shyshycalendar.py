@@ -29,7 +29,7 @@ import os
 
 def get_events():
     try:
-        import httplib2, dateutil.parser
+        import httplib2
         from apiclient import discovery
         from oauth2client import file
         from oauth2client import client
@@ -79,12 +79,15 @@ def get_events():
 def clean_events(google_events):
     for event in google_events:
         try:
+            import dateutil.parser
             datetime=dateutil.parser.parse(event["end"]["dateTime"])
             pretty_date=datetime.strftime("%A, %B %d %Y, %I:%M%p")
             pretty_date=pretty_date[:-2]+pretty_date[-2:].lower()
             event["pretty_date"]=pretty_date
         except KeyError:
             pass
+        except ImportError:
+            print("clean_events failed to import dateutil.parser")
     return google_events
 
 if __name__=="__main__":
