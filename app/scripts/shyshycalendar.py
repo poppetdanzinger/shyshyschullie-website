@@ -25,23 +25,29 @@ by running:
 
 """
 
-import httplib2
 import os, dateutil.parser
 
-from apiclient import discovery
-from oauth2client import file
-from oauth2client import client
-from oauth2client import tools
-
-CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
-FLOW = client.flow_from_clientsecrets(CLIENT_SECRETS,
-  scope=[
-      'https://www.googleapis.com/auth/calendar',
-      'https://www.googleapis.com/auth/calendar.readonly',
-    ],
-    message=tools.message_if_missing(CLIENT_SECRETS))
 
 def get_events():
+    try:
+        import httplib2
+        from apiclient import discovery
+        from oauth2client import file
+        from oauth2client import client
+        from oauth2client import tools
+        CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
+        FLOW = client.flow_from_clientsecrets(CLIENT_SECRETS,
+                                              scope=[
+                                                  'https://www.googleapis.com/auth/calendar',
+                                                  'https://www.googleapis.com/auth/calendar.readonly',
+                                              ],
+                                              message=tools.message_if_missing(CLIENT_SECRETS))
+
+    except ImportError as e:
+        print("ImportError in shyshycalendar. Are google calendar libraries installed?")
+        print(e)
+        return []
+
     storage = file.Storage('app/scripts/shyshy-storage.dat')
     credentials = storage.get()
     if credentials is None or credentials.invalid:
@@ -66,7 +72,10 @@ def get_events():
         print ("shyshycalendar.py fail: The credentials have been revoked or expired, please re-run"
       "the application to re-authorize")
 
-    return clean_events(google_events)
+    clean=clean_events(google_events)
+    for item in clean:
+        print(item)
+    return clean
 
 def clean_events(google_events):
     for event in google_events:

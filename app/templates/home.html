@@ -76,6 +76,17 @@
 
 	<div class="row-fluid content-background">
 		<div class="span7">
+			<h2 id="textfontbig">
+				Events
+			</h2>
+
+			{% if not events %}
+			<p>Oops! Normally my website lists events here. But never fear! Check out my <a href="https://www.google.com/calendar/embed?src=shyshyschullie%40gmail.com&ctz=America/Toronto">
+				Google Calendar
+				<img class="social-icon" src="{{ url_for('static', filename='img/google-calendar.png') }}" alt="google calendar">
+			</a></p>
+			{% endif %}
+
 			{% for event in events %}
 			<div>
 			<h3>{{event.title}}</h3>
