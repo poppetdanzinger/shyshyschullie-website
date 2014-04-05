@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'shyshyfont'; /*a name to be used later*/
-	src: url("/static/fonts/budmojiggler.ttf"); /*URL to font*/
+	src: url("../fonts/budmojiggler.ttf"); /*URL to font*/
 }
 
 #titlefont {
@@ -10,7 +10,7 @@
 
  @font-face {
 	 font-family: 'smallwriting'; /*a name to be used later*/
-	 src: url("/static/fonts/glamor.ttf"); /*URL to font*/
+	 src: url("../fonts/glamor.ttf"); /*URL to font*/
  }
  
  #textfont {
@@ -19,7 +19,7 @@
  }
  @font-face {
 	 font-family: 'smallwritingbigger'; /*a name to be used later*/
-	 src: url("/static/fonts/glamor.ttf"); /*URL to font*/
+	 src: url("../fonts/glamor.ttf"); /*URL to font*/
  }
  
  #textfontbig{
