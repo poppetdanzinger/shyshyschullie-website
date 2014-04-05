@@ -55,7 +55,7 @@ def get_events():
     storage = file.Storage('app/scripts/shyshy-storage.dat')
     credentials = storage.get()
     if credentials is None or credentials.invalid:
-        credentials = tools.run_flow(FLOW, storage, flags)
+        credentials = tools.run_flow(FLOW, storage, list())
 
     http = httplib2.Http()
     http = credentials.authorize(http)
