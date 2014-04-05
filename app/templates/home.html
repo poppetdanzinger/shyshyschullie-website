@@ -89,7 +89,9 @@
 
 			{% for event in events %}
 			<div>
-			<h3>{{event.title}}</h3>
+			{% if event.summary %}
+			<h3>{{event.summary}}</h3>
+			{% endif %}
 			
 			{% if event.location %}
 			<p><strong>Where:</strong> <a href="http://maps.google.com/?q={{event.url_safe_location}}">
@@ -99,26 +101,16 @@
 			</p>
 			{% endif %}
 
-			{% if event.date %}
-			<p><strong>Date:</strong> {{event.date}}</p>
-				{% if event.time %}
-				<p><strong>When:</strong> {{event.time}}</p>
-				{% endif %}
-				{% if event.doorsopen %}
-				<p><strong>Doors open at:</strong> {{event.doorsopen}}</p>
-				{% endif %}
+			{% if event.pretty_date %}
+			<p><strong>Time:</strong> {{event.pretty_date}}</p>
 			{% endif %}
 
-			{% if event.link %}
-			<p><strong><a href="{{ event.link }}">More Info</a></strong></p>
+			{% if event.description %}
+			<p><strong>Info:</strong> {{ event.description }}</p>
 			{% endif %}
 
-			{% if event.dresscode %}
-			<p><strong>Dress code!</strong> {{event.dresscode}}</p>
-			{% endif %}
-
-			{% if event.notes %}
-			<p><strong>Take note!</strong> {{event.notes}}</p>
+			{% if event.htmlLink %}
+			<p><strong><a href="{{ event.htmlLink }}">More Info</a></strong></p>
 			{% endif %}
 
 			</div>

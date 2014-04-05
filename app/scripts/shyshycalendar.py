@@ -25,12 +25,11 @@ by running:
 
 """
 
-import os, dateutil.parser
-
+import os
 
 def get_events():
     try:
-        import httplib2
+        import httplib2, dateutil.parser
         from apiclient import discovery
         from oauth2client import file
         from oauth2client import client
