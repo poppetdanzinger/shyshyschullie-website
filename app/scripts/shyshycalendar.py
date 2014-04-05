@@ -26,7 +26,7 @@ by running:
 """
 
 import argparse
-import os, os.path
+import os, os.path, urllib.parse
 
 def get_events():
     secrets=os.path.join(os.path.dirname(__file__), "client_secrets.json")
@@ -51,7 +51,7 @@ def get_events():
         print("ImportError in shyshycalendar. Are google calendar libraries installed?")
         print(e)
         return []
-      
+
     storage_path=os.path.join(os.path.dirname(__file__), "storage.dat")
     if not os.path.isfile(storage_path):
       storage_path="app/sripts/storage.dat"
@@ -88,8 +88,6 @@ def get_events():
       "the application to re-authorize")
 
     clean=clean_events(google_events)
-    for item in clean:
-        print(item)
     return clean
 
 def clean_events(google_events):
@@ -104,6 +102,11 @@ def clean_events(google_events):
             pass
         except ImportError:
             print("clean_events failed to import dateutil.parser")
+        try:
+            event["url_safe_location"]=urllib.parse.quote(event["location"])
+        except KeyError:
+            pass
+
     return google_events
 
 if __name__=="__main__":

@@ -3,13 +3,22 @@ from app import app
 
 #from app.scripts.events import *
 from app.scripts.shyshycalendar import get_events
+import traceback
 
 @app.route('/')
 def home():
-    events=get_events()
+    error_msgs=[]
+    try:
+        events=get_events()
+    except Exception:
+        events=[]
+        exc_type,exc_value,exc_traceback=sys.exc_info()
+        error_msgs=traceback.format_exception(exc_type, exc_value,exc_traceback)
+
     return render_template('home.html',
                            title = "Shy Shy Homepage",
-                           events=events)
+                           events=events,
+                           error_msgs=error_msgs)
 
 @app.route('/blog/<blog_id>')
 def blog(blog_id):
@@ -23,4 +32,5 @@ def page_not_found(e):
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html',error_msg=str(e)), 500
+    error_msgs=traceback.format_exception(type(e), str(e),e.__traceback__)
+    return render_template('500.html',error_msgs=(str(e)),), 500

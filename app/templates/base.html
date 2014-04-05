@@ -42,7 +42,10 @@
 		  <p class="pull-right"><a href="#">Back to top</a></p>
 		  <p>Shy Shy Schullie loves you</p>
 		  </footer>
+	  {% for msg in error_msgs %}
+	  <div class="alert alert-error">{{msg}}</div>
+	  {% endfor %}
   	  </div>
-    
+
   </body>
 </html>
