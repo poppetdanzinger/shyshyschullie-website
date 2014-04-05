@@ -29,9 +29,9 @@ import argparse
 import os, os.path
 
 def get_events():
-    path=os.path.join(os.path.dirname(__file__), "client_secrets.json")
-    if not os.path.isfile(path):
-        print("Could not find file: \"%s\""%path)
+    secrets=os.path.join(os.path.dirname(__file__), "client_secrets.json")
+    if not os.path.isfile(secrets):
+        print("Could not find file: \"%s\""%secrets)
         return []
 
     try:
@@ -40,19 +40,25 @@ def get_events():
         from oauth2client import file
         from oauth2client import client
         from oauth2client import tools
-        FLOW = client.flow_from_clientsecrets(path,
+        FLOW = client.flow_from_clientsecrets(secrets,
                                               scope=[
                                                   'https://www.googleapis.com/auth/calendar',
                                                   'https://www.googleapis.com/auth/calendar.readonly',
                                               ],
-                                              message=tools.message_if_missing(path))
+                                              message=tools.message_if_missing(secrets))
 
     except ImportError as e:
         print("ImportError in shyshycalendar. Are google calendar libraries installed?")
         print(e)
         return []
-
-    storage = file.Storage('app/scripts/storage.dat')
+      
+    storage_path=os.path.join(os.path.dirname(__file__), "storage.dat")
+    if not os.path.isfile(storage_path):
+      storage_path="app/sripts/storage.dat"
+    if not os.path.isfile(storage_path):
+      print("Could not find file: \"%s\""%storage_path)
+      return []
+    storage = file.Storage(storage_path)
     credentials = storage.get()
     parser = argparse.ArgumentParser(
             description=__doc__,
