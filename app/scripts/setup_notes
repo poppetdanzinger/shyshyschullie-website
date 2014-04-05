@@ -8,5 +8,9 @@ in that repo there are folders:
 *uritemplate
 which must be in venv site packages.
 
+also install python3-dateutil
+
 run this the first time:
-python3 sample.py --noauth_local_webserver 
+python3 setup_calendar.py --noauth_local_webserver 
+this generates client_secrets.json, which should not be in your git commit
+setup_calendar.py was originally "sample.py" in the package "calendar-cmd-line-sample"
