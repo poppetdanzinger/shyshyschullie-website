@@ -1,3 +1,32 @@
+@font-face {
+	font-family: 'shyshyfont'; /*a name to be used later*/
+	src: url("/static/fonts/budmo/budmojiggler.ttf"); /*URL to font*/
+}
+
+#titlefont {
+	    font-family: 'shyshyfont';
+	    font-size:80px
+    }
+
+ @font-face {
+	 font-family: 'smallwriting'; /*a name to be used later*/
+	 src: url("/static/fonts/glamor.ttf"); /*URL to font*/
+ }
+ 
+ #textfont {
+	 font-family: 'smallwriting';
+	 font-size:20px
+ }
+ @font-face {
+	 font-family: 'smallwritingbigger'; /*a name to be used later*/
+	 src: url("/static/fonts/glamor.ttf"); /*URL to font*/
+ }
+ 
+ #textfontbig{
+	 font-family: 'smallwritingbigger';
+	 font-size:35px
+ }
+ 
 .alex-splash{
   height: 400px;
   width: auto;

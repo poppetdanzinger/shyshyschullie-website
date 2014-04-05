@@ -6,16 +6,16 @@
 <div class="hero-unit banner-background">
 	<div class="row">
 		<div class="col-lg-4">
-			<img class="alex-splash" src="{{ url_for('static', filename='img/circle-alex3.png') }}" alt="picture of shy shy">
+			<img class="alex-splash" src="{{ url_for('static', filename='img/circle-alex2.png') }}" alt="picture of shy shy">
 		</div>
 		<div class="col-lg-4">
 			<img class="img-center alex-circle" src="{{ url_for('static', filename='img/gold-flowers1.png') }}" alt="gold flowers">
-			<h1>Shy Shy Schullie!</h1>
-			<h3>Singer & Performer</h3>
+			<h1 id="titlefont">Shy Shy Schullie!</h1>
+			<h3></h3>
 			<img class="img-center alex-circle" src="{{ url_for('static', filename='img/gold-flowers2.png') }}" alt="gold flowers">
 		</div>
 		<div class="col-lg-4">
-			<img class="alex-splash alex-circle-right" src="{{ url_for('static', filename='img/circle-alex5.png') }}" alt="picture of shy shy">
+			<img class="alex-splash alex-circle-right" src="{{ url_for('static', filename='img/circle-alex1.png') }}" alt="picture of shy shy">
 		</div>
 	</div>
 </div>
@@ -25,7 +25,7 @@
 	<div class="row content-background">
 		<div class="col-lg-3">
 			<img class="img-circle" src="{{ url_for('static', filename='img/contact.png') }}" alt="contact information">
-			<h2>Contact</h2>
+			<h2 Id="textfontbig">Contact</h2>
 			<h4>To book or inquire:</h4>
 			<p>info@shyshyschullie.com</p>
 			<a name="Facebook" href="http://www.facebook.com/shyshyschullie">		  
@@ -43,7 +43,7 @@
 	        </div><!-- /.col-lg-4 -->
 		<div class="col-lg-6">
 			<img class="img-circle" src="{{ url_for('static', filename='img/about.png') }}" alt="Generic placeholder image">
-			<h2>About</h2>
+			<h2 Id="textfontbig">About</h2>
 	      		<p>
 			Shy Shy Schullie is a singer and burlesque artist exploring her talent in the lovely city of Montreal. She has been a singer and performer at heart since childhood and began to dabble with many choirs ranging from classical to Broadway.
 			</p>
@@ -53,7 +53,7 @@
 	        </div>
 		<div class="col-lg-3">
 			<img class="img-circle" src="{{ url_for('static', filename='img/blog.png') }}" alt="Generic placeholder image">
-			<h2>Blog</h2>
+			<h2 Id="textfontbig">Blog</h2>
 			<p>First post coming soon!</p>
 		</div>
 	</div>
@@ -65,8 +65,8 @@
 <div class="container">
 	<div class="hero-unit banner-background">
 			<img class="img-center alex-circle" src="{{ url_for('static', filename='img/gold-flowers1.png') }}" alt="gold flowers">
-		<h1>Upcoming Events</h1>
-		<p>You can also follow my <a href="https://www.google.com/calendar/embed?src=shyshyschullie%40gmail.com&ctz=America/Toronto">
+		<h1 Id="titlefont">Upcoming Events</h1>
+		<p Id="textfont">You can also follow my <a href="https://www.google.com/calendar/embed?src=shyshyschullie%40gmail.com&ctz=America/Toronto">
 			Google Calendar
 			<img class="social-icon" src="{{ url_for('static', filename='img/google-calendar.png') }}" alt="google calendar">
 		</a></p>
@@ -78,11 +78,7 @@
 		<div class="span7">
 			{% for event in events %}
 			<div>
-				{% if event.summary %}
-				<h3>{{event.summary}}</h3>
-				{% else %}
-				<h3>No title for this event!</h3>
-				{% endif %}
+			<h3>{{event.title}}</h3>
 			
 			{% if event.location %}
 			<p><strong>Where:</strong> <a href="http://maps.google.com/?q={{event.url_safe_location}}">
@@ -92,23 +88,37 @@
 			</p>
 			{% endif %}
 
-			{% if event.pretty_date %}
-			<p><strong>When:</strong> {{event.pretty_date}}</p>
+			{% if event.date %}
+			<p><strong>Date:</strong> {{event.date}}</p>
+				{% if event.time %}
+				<p><strong>When:</strong> {{event.time}}</p>
+				{% endif %}
+				{% if event.doorsopen %}
+				<p><strong>Doors open at:</strong> {{event.doorsopen}}</p>
+				{% endif %}
 			{% endif %}
 
 			{% if event.link %}
 			<p><strong><a href="{{ event.link }}">More Info</a></strong></p>
 			{% endif %}
 
+			{% if event.dresscode %}
+			<p><strong>Dress code!</strong> {{event.dresscode}}</p>
+			{% endif %}
+
+			{% if event.notes %}
+			<p><strong>Take note!</strong> {{event.notes}}</p>
+			{% endif %}
+
 			</div>
 			{% endfor %}
 		</div>
 		<div class="span5">
-			<img class="alex-circle alex-circle-right" src="{{ url_for('static', filename='img/circle-alex1.png') }}" alt="picture of alex">
+			<img class="alex-circle alex-circle-right" src="{{ url_for('static', filename='img/circle-alex5.png') }}" alt="picture of alex">
 			<br>
 			<img class="alex-circle" src="{{ url_for('static', filename='img/circle-alex6.png') }}" alt="picture of alex">
 			<br>
-			<img class="alex-circle alex-circle-right" src="{{ url_for('static', filename='img/circle-alex2.png') }}" alt="picture of alex">
+			<img class="alex-circle alex-circle-right" src="{{ url_for('static', filename='img/circle-alex3.png') }}" alt="picture of alex">
 		</div>
 	</div>
 </div>
