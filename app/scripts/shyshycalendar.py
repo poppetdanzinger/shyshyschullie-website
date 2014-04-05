@@ -25,6 +25,7 @@ by running:
 
 """
 
+import argparse
 import os, os.path
 
 def get_events():
@@ -54,8 +55,13 @@ def get_events():
 
     storage = file.Storage('app/scripts/shyshy-storage.dat')
     credentials = storage.get()
+    parser = argparse.ArgumentParser(
+            description=__doc__,
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            parents=[tools.argparser])
+    flags = parser.parse_args(list())
     if credentials is None or credentials.invalid:
-        credentials = tools.run_flow(FLOW, storage, list())
+        credentials = tools.run_flow(FLOW, storage, flags)
 
     http = httplib2.Http()
     http = credentials.authorize(http)
