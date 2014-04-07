@@ -25,7 +25,7 @@ by running:
 
 """
 
-import argparse,datetime
+import argparse,datetime,copy
 import os, os.path, urllib.parse
 
 "try to import third party packages, but don't crash whole site if something is missing"
@@ -38,6 +38,81 @@ try:
     import_error=0
 except ImportError as e:
     import_error=e
+
+class EventManager():
+    def __init__(self,service,verbose=0):
+        self.verbose=verbose
+
+        self.set_events(service)
+        self.clean_events()
+        self.add_recurring_events()
+        self.time_filter_events()
+        self.sort_events()
+
+    def set_events(self,service):
+        self.events=[]
+        page_token = None
+        try:
+            while True:
+                service_events = service.events().list(calendarId='primary', pageToken=page_token).execute()
+                for event in service_events['items']:
+                    self.events.append(event)
+                    if self.verbose:
+                        print("EVENT:")
+                        print(event)
+                page_token = service_events.get('nextPageToken')
+                if not page_token:
+                    break
+        except client.AccessTokenRefreshError:
+            if self.verbose:
+                print ("shyshycalendar.py fail: The credentials have been revoked or expired, please re-run"
+                       "the application to re-authorize")
+
+    def sort_events(self):
+        self.events=sorted(self.events,key=lambda event: event["datetime"])
+
+    def time_filter_events(self):
+        cutoff=get_min_cutoff()
+
+        for event in self.events:
+            sign="<" if event["datetime"]<cutoff else ">"
+            print("%s %s %s       pretty_date=%s"%(event["datetime"],sign,cutoff,event["pretty_date"]))
+
+        self.events=[event for event in self.events if event["datetime"]>cutoff]
+
+    def add_recurring_events(self,days_into_future=30):
+        "recurring events only appear once. this makes copies of those events"
+        min_cutoff=get_min_cutoff()
+        max_cutoff=datetime.datetime.now()+datetime.timedelta(days=days_into_future)
+
+        for event in self.events[:]:
+            if ("recurrence" not in event or
+                not len(event["recurrence"]) or
+                "FREQ=WEEKLY" not in event["recurrence"][0]):
+                continue
+            new_event=copy.deepcopy(event)
+            while new_event["datetime"]<min_cutoff:
+                new_event["datetime"] += datetime.timedelta(days=7)
+
+            for i in range(int(days_into_future/7)+1):
+                if new_event["datetime"]>max_cutoff:
+                    break
+                new_event=copy.deepcopy(new_event)
+                new_event["datetime"] += datetime.timedelta(days=7)
+                set_pretty_date(new_event)
+                self.events.append(new_event)
+
+    def clean_events(self):
+        "adds entries to each event and exclude events that happened more than 12 hours ago"
+        import dateutil.parser
+
+        for event in self.events:
+            dt=dateutil.parser.parse(event["end"]["dateTime"])
+            dt=dt.replace(tzinfo=None)
+            event["datetime"]=dt
+            set_pretty_date(event)
+            event["url_safe_location"]=urllib.parse.quote(event["location"])
+
 
 
 def get_flow(verbose=0):
@@ -93,50 +168,21 @@ def get_events(verbose=0):
             print("Failed to get service.")
         return []
 
-    events=[]
-    page_token = None
-    try:
-        while True:
-            service_events = service.events().list(calendarId='primary', pageToken=page_token).execute()
-            for event in service_events['items']:
-                events.append(event)
-                if verbose:
-                    print(event)
-            page_token = service_events.get('nextPageToken')
-            if not page_token:
-                break
-    except client.AccessTokenRefreshError:
-        if verbose:
-            print ("shyshycalendar.py fail: The credentials have been revoked or expired, please re-run"
-                   "the application to re-authorize")
-        return []
+    em=EventManager(service)
+    return em.events
 
-    events=get_clean_events(events,exclude_past=0)
-    events=sorted(events,key=lambda event: event["datetime"])
-    return events
 
-def add_recurring_events(events,days_into_future=30):
-    "recurring events only appear once. this makes copies of those events"
-    for event in events:
-        pass
+def get_min_cutoff():
+    "no date earlier than this cutoff should ever appear in any list"
+    return datetime.datetime.now()+datetime.timedelta(hours=12)
 
-def get_clean_events(events,exclude_past=0):
-    "adds entries to each event and excludes events that happened more than 12 hours ago"
-    import dateutil.parser
-    cutoff=datetime.datetime.now()+datetime.timedelta(hours=12)
 
-    for event in events:
-        if exclude_past and event<cutoff:
-            continue
-        dt=dateutil.parser.parse(event["end"]["dateTime"])
-        event["datetime"]=dt
-
-        pretty_date=dt.strftime("%A, %B %d %Y, %I:%M%p")
-        pretty_date=pretty_date[:-2]+pretty_date[-2:].lower()
-        event["pretty_date"]=pretty_date
-        event["url_safe_location"]=urllib.parse.quote(event["location"])
-
-    return events
+def set_pretty_date(event):
+    "requires the 'datetime' key in event"
+    dt=event["datetime"]
+    pretty_date=dt.strftime("%A, %B %d %Y, %I:%M%p")
+    pretty_date=pretty_date[:-2]+pretty_date[-2:].lower()
+    event["pretty_date"]=pretty_date
 
 if __name__=="__main__":
     for event in get_events():
