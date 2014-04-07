@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  <link rel="icon" 
+        type="image/png" 
+	      href="static/img/shycon.png">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
     {% if title %}
     <title>{{ title }}</title>
@@ -42,10 +44,7 @@
 		  <p class="pull-right"><a href="#">Back to top</a></p>
 		  <p>Shy Shy Schullie loves you</p>
 		  </footer>
-	  {% for msg in error_msgs %}
-	  <div class="alert alert-error">{{msg}}</div>
-	  {% endfor %}
   	  </div>
-
+    
   </body>
 </html>
