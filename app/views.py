@@ -3,13 +3,13 @@ from app import app
 
 #from app.scripts.events import *
 from app.scripts.shyshycalendar import get_events
-import traceback
+import traceback,sys
 
 @app.route('/')
 def home():
     error_msgs=[]
     try:
-        events=get_events()
+        events=get_events(verbose=app.debug)
     except Exception:
         events=[]
         exc_type,exc_value,exc_traceback=sys.exc_info()
