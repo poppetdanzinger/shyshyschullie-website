@@ -98,24 +98,25 @@ class EventManager():
                 not len(event["recurrence"]) or
                 "FREQ=WEEKLY" not in event["recurrence"][0]):
                 continue
-            new_event=copy.deepcopy(event)
-            while new_event["datetime"]<min_cutoff:
-                new_event["datetime"] += datetime.timedelta(days=7)
 
-            for i in range(int(days_into_future/7)+1):
-                if new_event["datetime"]>max_cutoff:
-                    break
+            new_event=0
+            while not new_event or new_event["datetime"]<max_cutoff:
+                if new_event:
+                    self.events.append(new_event)
+                else:
+                    new_event=copy.deepcopy(event)
                 new_event=copy.deepcopy(new_event)
                 new_event["datetime"] += datetime.timedelta(days=7)
                 set_pretty_date(new_event)
-                self.events.append(new_event)
+                if new_event["datetime"]<min_cutoff:
+                    continue
 
     def clean_events(self):
         "adds entries to each event and exclude events that happened more than 12 hours ago"
         import dateutil.parser
 
         for event in self.events:
-            dt=dateutil.parser.parse(event["end"]["dateTime"])
+            dt=dateutil.parser.parse(event["start"]["dateTime"])
             dt=dt.replace(tzinfo=None)
             event["datetime"]=dt
             set_pretty_date(event)
