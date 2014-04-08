@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, g, session, request
 from app import app
 
 #from app.scripts.events import *
-from app.scripts.shyshycalendar import EventManager
+from app.scripts.eventmanager import EventManager
 import traceback,sys
 
 @app.route('/')
