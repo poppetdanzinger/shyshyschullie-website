@@ -39,9 +39,19 @@
           {% block content %}{% endblock %}
 	  
 	  <div class="container">
+
+		  {% if error_msgs %}
+		  <div class="alert alert-error">
+			  {% for error_msg in error_msgs %}
+			  <p>{{ error_msg }}</p>
+			  {% endfor %}
+		  </div>
+		  {% endif %}
+
 		  <hr class="featurette-divider">
 		  <footer>
 		  <p class="pull-right"><a href="#">Back to top</a></p>
+
 		  <p>Shy Shy Schullie loves you</p>
 		  </footer>
   	  </div>

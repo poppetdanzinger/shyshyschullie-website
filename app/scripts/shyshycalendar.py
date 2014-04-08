@@ -40,21 +40,33 @@ except ImportError as e:
     import_error=e
 
 class EventManager():
-    def __init__(self,service,verbose=0):
+    def __init__(self,verbose=0):
         self.verbose=verbose
+        self.events=[]
 
-        self.set_events(service)
+        if import_error:
+            if verbose:
+                print(str(import_error))
+                return
+
+        self.set_service(verbose=verbose)
+        if not self.service:
+            if self.verbose:
+                print("Failed to set service.")
+            return
+
+        self.set_events()
         self.clean_events()
         self.add_recurring_events()
         self.time_filter_events()
         self.sort_events()
 
-    def set_events(self,service):
+    def set_events(self):
         self.events=[]
         page_token = None
         try:
             while True:
-                service_events = service.events().list(calendarId='primary', pageToken=page_token).execute()
+                service_events = self.service.events().list(calendarId='primary', pageToken=page_token).execute()
                 for event in service_events['items']:
                     self.events.append(event)
                     if self.verbose:
@@ -73,10 +85,6 @@ class EventManager():
 
     def time_filter_events(self):
         cutoff=get_min_cutoff()
-
-        for event in self.events:
-            sign="<" if event["datetime"]<cutoff else ">"
-            print("%s %s %s       pretty_date=%s"%(event["datetime"],sign,cutoff,event["pretty_date"]))
 
         self.events=[event for event in self.events if event["datetime"]>cutoff]
 
@@ -113,64 +121,45 @@ class EventManager():
             set_pretty_date(event)
             event["url_safe_location"]=urllib.parse.quote(event["location"])
 
+    def get_flow(self,verbose=0):
+        "returns a configured google api flow object"
+        secrets=os.path.join(os.path.dirname(__file__), "client_secrets.json")
+        if not os.path.isfile(secrets):
+            if verbose:
+                print("Could not find file: \"%s\""%secrets)
+            return 0
 
+        flow = client.flow_from_clientsecrets(secrets,
+                                              scope=[
+                                                  'https://www.googleapis.com/auth/calendar',
+                                                  'https://www.googleapis.com/auth/calendar.readonly',
+                                              ],
+                                              message=tools.message_if_missing(secrets))
+        return flow
 
-def get_flow(verbose=0):
-    "returns a configured google api flow object"
-    secrets=os.path.join(os.path.dirname(__file__), "client_secrets.json")
-    if not os.path.isfile(secrets):
-        if verbose:
-            print("Could not find file: \"%s\""%secrets)
-        return 0
+    def set_service(self,verbose=0):
+        "sets self.service to a google api service object, authenticated and ready to go"
+        storage_path=os.path.join(os.path.dirname(__file__), "storage.dat")
+        if not os.path.isfile(storage_path):
+            storage_path="app/sripts/storage.dat"
+        if not os.path.isfile(storage_path):
+            if verbose:
+                print("Could not find file: \"%s\""%storage_path)
+            return 0
+        storage = file.Storage(storage_path)
+        credentials = storage.get()
+        parser = argparse.ArgumentParser(
+                description=__doc__,
+                formatter_class=argparse.RawDescriptionHelpFormatter,
+                parents=[tools.argparser])
+        flags = parser.parse_args(list())
+        if credentials is None or credentials.invalid:
+            flow=self.get_flow()
+            credentials = tools.run_flow(flow, storage, flags)
 
-    flow = client.flow_from_clientsecrets(secrets,
-                                          scope=[
-                                              'https://www.googleapis.com/auth/calendar',
-                                              'https://www.googleapis.com/auth/calendar.readonly',
-                                          ],
-                                          message=tools.message_if_missing(secrets))
-    return flow
-
-def get_service(verbose=0):
-    "returns a google api service object, authenticated and ready to go"
-    storage_path=os.path.join(os.path.dirname(__file__), "storage.dat")
-    if not os.path.isfile(storage_path):
-        storage_path="app/sripts/storage.dat"
-    if not os.path.isfile(storage_path):
-        if verbose:
-            print("Could not find file: \"%s\""%storage_path)
-        return 0
-    storage = file.Storage(storage_path)
-    credentials = storage.get()
-    parser = argparse.ArgumentParser(
-            description=__doc__,
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            parents=[tools.argparser])
-    flags = parser.parse_args(list())
-    if credentials is None or credentials.invalid:
-        flow=get_flow()
-        credentials = tools.run_flow(flow, storage, flags)
-
-    http = httplib2.Http()
-    http = credentials.authorize(http)
-    service = discovery.build('calendar', 'v3', http=http)
-    return service
-
-def get_events(verbose=0):
-    if import_error:
-        if verbose:
-            print(str(import_error))
-        return []
-
-    service=get_service(verbose=verbose)
-    if not service:
-        if verbose:
-            print("Failed to get service.")
-        return []
-
-    em=EventManager(service)
-    return em.events
-
+        http = httplib2.Http()
+        http = credentials.authorize(http)
+        self.service = discovery.build('calendar', 'v3', http=http)
 
 def get_min_cutoff():
     "no date earlier than this cutoff should ever appear in any list"

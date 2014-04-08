@@ -2,15 +2,17 @@ from flask import render_template, url_for, flash, redirect, g, session, request
 from app import app
 
 #from app.scripts.events import *
-from app.scripts.shyshycalendar import get_events
+from app.scripts.shyshycalendar import EventManager
 import traceback,sys
 
 @app.route('/')
 def home():
     error_msgs=[]
     try:
-        events=get_events(verbose=app.debug)
-    except Exception:
+        events=EventManager(verbose=app.debug).events
+    except Exception as e:
+        if app.debug:
+            print(e)
         events=[]
         exc_type,exc_value,exc_traceback=sys.exc_info()
         error_msgs=traceback.format_exception(exc_type, exc_value,exc_traceback)
