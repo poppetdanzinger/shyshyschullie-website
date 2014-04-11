@@ -164,7 +164,7 @@ class EventManager():
 
 def get_min_cutoff():
     "no date earlier than this cutoff should ever appear in any list"
-    return datetime.datetime.now()+datetime.timedelta(hours=12)
+    return datetime.datetime.now()-datetime.timedelta(hours=12)
 
 
 def set_pretty_date(event):
