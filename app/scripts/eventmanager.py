@@ -26,7 +26,7 @@ by running:
 """
 
 import argparse,datetime,copy
-import os, os.path, urllib.parse
+import os, os.path, urllib.parse, sys
 
 "try to import third party packages, but don't crash whole site if something is missing"
 try:
@@ -43,11 +43,16 @@ class EventManager():
     def __init__(self,verbose=0):
         self.verbose=verbose
         self.events=[]
+        self.error_msgs=[]
 
         if import_error:
+            self.error_msgs.append("Aborting EventManager: %s"%str(import_error))
+            self.error_msgs.append("sys.path:")
+            for path in sys.path:
+                self.error_msgs.append("\t%s"%path)
             if verbose:
-                print(str(import_error))
-                return
+                print("\n".join(self.error_msgs))
+            return
 
         self.set_service(verbose=verbose)
         if not self.service:

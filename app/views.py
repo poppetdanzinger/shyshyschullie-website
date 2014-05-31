@@ -8,12 +8,14 @@ import traceback,sys
 @app.route('/')
 def home():
     error_msgs=[]
+    events=[]
     try:
-        events=EventManager(verbose=app.debug).events
+        em=EventManager(verbose=app.debug)
+        events=em.events
+        error_msgs=em.error_msgs
     except Exception as e:
         if app.debug:
-            print(e)
-        events=[]
+            print("home encountered exception: %s"%e)
         exc_type,exc_value,exc_traceback=sys.exc_info()
         error_msgs=traceback.format_exception(exc_type, exc_value,exc_traceback)
 
