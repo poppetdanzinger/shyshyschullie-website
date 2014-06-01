@@ -26,7 +26,7 @@ by running:
 """
 
 import argparse,datetime,copy
-import os, os.path, urllib.parse, sys
+import os, os.path, urllib.parse, sys, traceback
 
 "try to import third party packages, but don't crash whole site if something is missing"
 try:
@@ -35,9 +35,14 @@ try:
     from oauth2client import file
     from oauth2client import client
     from oauth2client import tools
-    import_error=0
+    import_errors=0
 except ImportError as e:
-    import_error=e
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+
+    import_errors=[str(e)]
+    import_errors.extend(traceback.format_tb(exc_traceback))
+    #import_errors.append("sys.path:")
+    #import_errors.extend(["\t"+path for path in sys.path])
 
 class EventManager():
     def __init__(self,verbose=0):
@@ -45,11 +50,8 @@ class EventManager():
         self.events=[]
         self.error_msgs=[]
 
-        if import_error:
-            self.error_msgs.append("Aborting EventManager: %s"%str(import_error))
-            self.error_msgs.append("sys.path:")
-            for path in sys.path:
-                self.error_msgs.append("\t%s"%path)
+        if import_errors:
+            self.error_msgs=import_errors
             if verbose:
                 print("\n".join(self.error_msgs))
             return
@@ -120,12 +122,19 @@ class EventManager():
         "adds entries to each event and exclude events that happened more than 12 hours ago"
         import dateutil.parser
 
-        for event in self.events:
-            dt=dateutil.parser.parse(event["start"]["dateTime"])
-            dt=dt.replace(tzinfo=None)
-            event["datetime"]=dt
-            set_pretty_date(event)
-            event["url_safe_location"]=urllib.parse.quote(event["location"])
+        for event in self.events[:]:
+            try:
+                dt=dateutil.parser.parse(event["start"]["dateTime"])
+                dt=dt.replace(tzinfo=None)
+                event["datetime"]=dt
+                set_pretty_date(event)
+                event["url_safe_location"]=urllib.parse.quote(event["location"])
+            except KeyError as e:
+                self.events.remove(event)
+                if self.verbose:
+                    print("\nRemoved event because it failed to clean:")
+                    print(event)
+
 
     def get_flow(self,verbose=0):
         "returns a configured google api flow object"
