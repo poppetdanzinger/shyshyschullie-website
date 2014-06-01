@@ -1,0 +1,18 @@
+venv/bin/pip3 install flask
+#venv/bin/pip3 install flask-login
+#venv/bin/pip3 install flask-openid
+#venv/bin/pip3 install flask-shelve
+#venv/bin/pip3 install sqlalchemy
+#venv/bin/pip3 install flask-sqlalchemy
+#venv/bin/pip3 install sqlalchemy-migrate
+#venv/bin/pip3 install flask-whooshalchemy
+venv/bin/pip3 install flask-wtf
+venv/bin/pip3 install pytz
+#venv/bin/pip3 install flask-babel
+#venv/bin/pip3 install flup
+
+venv/bin/pip3 install python-dateutil
+
+venv/bin/pip3.4 install apiclient
+venv/bin/pip3.4 install urllib3
+venv/bin/pip3.4 install oauth2client

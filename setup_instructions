@@ -1,0 +1,18 @@
+pyvenv-3.4 venv
+./lib_installer.bs
+
+"pyvenv-3.4 venv" error:
+As a stop-gap solution for n00bs like me, download the lib/ensurepip directory from the Python 3.4 source code, and place it in /usr/lib/python3.4 with the proper permissions.
+
+
+
+GOOGLE API FOR PYYTHON3:
+python3.4/site-packages/apiclient/base.py", line 4, in <module> from urllib import urlencode
+changed "from urllib" to "from urllib.parse"
+
+instead of apiclient, urllib3, and oauth2client, maybe this is better?
+venv/bin/pip3.4 install --upgrade google-api-python-client
+
+venv/bin/pip3 install git+https://github.com/enorvelle/GoogleApiPython3x.git
+
+
